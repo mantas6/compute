@@ -1,0 +1,87 @@
+.stage {
+  --cell-size: 72px;
+  padding: 1rem;
+  background: #1c1c1c;
+  border: 1px solid #333;
+  border-radius: 12px;
+}
+
+.grid {
+  display: grid;
+  gap: 4px;
+}
+
+.cell {
+  width: var(--cell-size);
+  height: var(--cell-size);
+  border: 1px solid #333;
+  border-radius: 8px;
+  background: #262626;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  transition:
+    border-color 0.1s ease,
+    background 0.1s ease,
+    box-shadow 0.1s ease;
+}
+
+.cell:disabled {
+  cursor: default;
+}
+
+.empty:hover:not(:disabled) {
+  border-color: #4a4a4a;
+}
+
+.placeable {
+  border-style: dashed;
+  border-color: #5b8def;
+  background: #21283a;
+}
+
+.placeable:hover:not(:disabled) {
+  background: #29344d;
+}
+
+.occupied {
+  border-color: #444;
+}
+
+.selected {
+  box-shadow: 0 0 0 2px #5b8def;
+  border-color: #5b8def;
+}
+
+.glyph {
+  display: grid;
+  place-items: center;
+  width: 70%;
+  height: 70%;
+  border-radius: 6px;
+  font-weight: 700;
+  font-size: 1.1rem;
+  background: #3a3a3a;
+}
+
+.cell[data-kind='psu'] .glyph {
+  background: #6b4fb3;
+}
+.cell[data-kind='interface'] .glyph {
+  background: #3f6f8f;
+}
+.cell[data-kind='cpu'] .glyph {
+  background: #b3543f;
+}
+.cell[data-kind='ram'] .glyph {
+  background: #3f8f6b;
+}
+.cell[data-kind='heatsink'] .glyph {
+  background: #7a7a7a;
+}
+.cell[data-kind='fan'] .glyph {
+  background: #4f7db3;
+}

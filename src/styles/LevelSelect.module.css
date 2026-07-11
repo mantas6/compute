@@ -1,0 +1,101 @@
+.screen {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 3rem 1.5rem;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 2.5rem;
+}
+
+.title {
+  font-size: 3rem;
+  margin: 0;
+  letter-spacing: -0.02em;
+}
+
+.subtitle {
+  margin: 0.5rem 0 0;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1rem;
+}
+
+.card {
+  width: 100%;
+  text-align: left;
+  background: #242424;
+  border: 1px solid #3a3a3a;
+  border-radius: 10px;
+  padding: 1.1rem 1.25rem;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+  transition:
+    border-color 0.15s ease,
+    transform 0.1s ease,
+    background 0.15s ease;
+}
+
+.card:hover {
+  border-color: #5b8def;
+  background: #2a2a2a;
+  transform: translateY(-2px);
+}
+
+.cardHead {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.name {
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.grid {
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.5);
+  font-variant-numeric: tabular-nums;
+}
+
+.desc {
+  margin: 0.5rem 0 0.9rem;
+  color: rgba(255, 255, 255, 0.65);
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
+
+.meta {
+  display: flex;
+  gap: 1.25rem;
+  margin: 0;
+}
+
+.meta div {
+  display: flex;
+  flex-direction: column;
+}
+
+.meta dt {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: rgba(255, 255, 255, 0.45);
+}
+
+.meta dd {
+  margin: 0;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}

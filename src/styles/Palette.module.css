@@ -1,0 +1,109 @@
+.palette {
+  background: #202020;
+  border: 1px solid #333;
+  border-radius: 10px;
+  padding: 1rem;
+}
+
+.heading {
+  margin: 0 0 0.75rem;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.item {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  background: #2a2a2a;
+  border: 1px solid #383838;
+  border-radius: 8px;
+  padding: 0.55rem 0.7rem;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+  text-align: left;
+  transition:
+    border-color 0.12s ease,
+    background 0.12s ease;
+}
+
+.item:hover:not(:disabled) {
+  border-color: #5b8def;
+}
+
+.item.selected {
+  border-color: #5b8def;
+  background: #29344d;
+}
+
+.item:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.glyph {
+  display: grid;
+  place-items: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 6px;
+  font-weight: 700;
+  background: #3a3a3a;
+  flex-shrink: 0;
+}
+
+.info {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.25;
+}
+
+.name {
+  font-weight: 600;
+}
+
+.sub {
+  font-size: 0.78rem;
+  color: rgba(255, 255, 255, 0.5);
+  font-variant-numeric: tabular-nums;
+}
+
+.hint {
+  margin: 0.9rem 0 0;
+  font-size: 0.78rem;
+  line-height: 1.4;
+  color: rgba(255, 255, 255, 0.45);
+}
+
+/* Component accent colors, shared by palette glyphs and grid cells. */
+.glyph[data-kind='psu'] {
+  background: #6b4fb3;
+}
+.glyph[data-kind='interface'] {
+  background: #3f6f8f;
+}
+.glyph[data-kind='cpu'] {
+  background: #b3543f;
+}
+.glyph[data-kind='ram'] {
+  background: #3f8f6b;
+}
+.glyph[data-kind='heatsink'] {
+  background: #7a7a7a;
+}
+.glyph[data-kind='fan'] {
+  background: #4f7db3;
+}

@@ -1,0 +1,27 @@
+.build {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.workspace {
+  flex: 1;
+  display: grid;
+  grid-template-columns: 240px 1fr 280px;
+  gap: 1rem;
+  padding: 1rem;
+  align-items: start;
+}
+
+.stage {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 60vh;
+}
+
+@media (max-width: 900px) {
+  .workspace {
+    grid-template-columns: 1fr;
+  }
+}
