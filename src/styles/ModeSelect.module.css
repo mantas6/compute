@@ -1,0 +1,211 @@
+.screen {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: clamp(2.5rem, 8vw, 5rem) 1.5rem 3.5rem;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 2.75rem;
+}
+
+.brand {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.5rem;
+}
+
+.prompt {
+  font-family: var(--mono);
+  font-size: clamp(1.8rem, 5vw, 2.6rem);
+  color: var(--accent);
+  animation: blink 1.2s steps(1) infinite;
+}
+
+@keyframes blink {
+  50% {
+    opacity: 0.25;
+  }
+}
+
+.title {
+  font-family: var(--mono);
+  font-size: clamp(2.2rem, 6vw, 3.2rem);
+  margin: 0;
+  letter-spacing: -0.03em;
+  font-weight: 700;
+  background: linear-gradient(120deg, var(--text), var(--accent));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.subtitle {
+  margin: 0.9rem auto 0;
+  max-width: 32rem;
+  color: var(--text-dim);
+  font-size: 0.98rem;
+}
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.25rem;
+  align-items: stretch;
+}
+
+.card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  background: linear-gradient(180deg, var(--panel-2), var(--panel));
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  padding: 1.4rem 1.4rem 1.5rem;
+  overflow: hidden;
+}
+
+.card::before {
+  content: '';
+  position: absolute;
+  inset: 0 0 auto;
+  height: 2px;
+  opacity: 0.9;
+}
+
+.career::before {
+  background: linear-gradient(90deg, transparent, var(--go), transparent);
+}
+.freeplay::before {
+  background: linear-gradient(90deg, transparent, var(--accent), transparent);
+}
+
+.cardHead {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  margin-bottom: 0.75rem;
+}
+
+.badge {
+  align-self: flex-start;
+  font-family: var(--mono);
+  font-size: 0.62rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--text-faint);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 0.16rem 0.55rem;
+}
+
+.cardTitle {
+  margin: 0;
+  font-size: 1.6rem;
+  letter-spacing: -0.01em;
+}
+
+.cardDesc {
+  margin: 0 0 1.1rem;
+  color: var(--text-dim);
+  font-size: 0.9rem;
+  line-height: 1.5;
+  flex: 1;
+}
+
+.progress {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.85rem 0;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  margin-bottom: 1.2rem;
+}
+
+.money {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.moneyLabel {
+  font-size: 0.64rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-faint);
+}
+
+.moneyValue {
+  font-family: var(--mono);
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--go-bright);
+}
+
+.freeplay .moneyValue {
+  color: var(--accent);
+}
+
+.progressStats {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  text-align: right;
+  font-family: var(--mono);
+  font-size: 0.8rem;
+  color: var(--text-dim);
+}
+
+.actions {
+  display: flex;
+  gap: 0.6rem;
+}
+
+.primary,
+.ghost {
+  font: inherit;
+  font-weight: 650;
+  font-size: 0.92rem;
+  padding: 0.6rem 1.1rem;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition:
+    filter 0.14s ease,
+    border-color 0.14s ease,
+    color 0.14s ease;
+}
+
+.career .primary {
+  background: linear-gradient(180deg, var(--go-bright), var(--go));
+  border: 1px solid var(--go-bright);
+  color: #04120a;
+  box-shadow: 0 0 16px rgba(52, 184, 87, 0.3);
+}
+
+.freeplay .primary {
+  background: linear-gradient(180deg, var(--accent), #2fb3bf);
+  border: 1px solid var(--accent);
+  color: #04141a;
+  box-shadow: 0 0 16px rgba(70, 212, 224, 0.28);
+}
+
+.primary {
+  flex: 1;
+}
+
+.primary:hover {
+  filter: brightness(1.08);
+}
+
+.ghost {
+  background: transparent;
+  border: 1px solid var(--line-2);
+  color: var(--text-dim);
+}
+
+.ghost:hover {
+  border-color: var(--bad);
+  color: var(--text);
+}

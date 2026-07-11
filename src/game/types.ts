@@ -306,4 +306,11 @@ export interface GameState {
   sim: SimState | null;
   /** Final scored result once a run finishes, or null otherwise. */
   result: RunResult | null;
+  /**
+   * Effective spending cap for this session. In Career Mode this is set to the
+   * player's current money (overriding the level's abstract budget) so parts
+   * can't be placed beyond what they can afford. `null` means "use the level's
+   * own `budget`" (Free Play), preserving the original behaviour.
+   */
+  budgetOverride: number | null;
 }

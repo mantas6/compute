@@ -218,6 +218,77 @@
   color: var(--text);
 }
 
+/* --- Career money breakdown --------------------------------------------- */
+
+.money {
+  border: 1px solid var(--line-2);
+  border-radius: var(--radius);
+  padding: 0.85rem 1rem;
+  margin-bottom: 1.25rem;
+  background: rgba(8, 11, 16, 0.4);
+}
+
+.moneyRow {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  font-family: var(--mono);
+  font-size: 0.86rem;
+  padding: 0.22rem 0;
+}
+
+.moneyLabel {
+  font-family: var(--sans);
+  color: var(--text-dim);
+  font-size: 0.82rem;
+}
+
+.moneyPos {
+  color: var(--go-bright);
+  font-weight: 700;
+}
+
+.moneyNeg {
+  color: var(--bad);
+  font-weight: 700;
+}
+
+.moneyDim {
+  color: var(--text-faint);
+  font-weight: 600;
+}
+
+.moneyNet {
+  border-top: 1px dashed var(--line);
+  margin-top: 0.2rem;
+  padding-top: 0.45rem;
+}
+
+.moneyBalance {
+  border-top: 1px solid var(--line-2);
+  margin-top: 0.2rem;
+  padding-top: 0.45rem;
+}
+
+.moneyValue {
+  font-weight: 700;
+  color: var(--accent);
+  font-size: 1rem;
+}
+
+.unlockNote {
+  margin: 0.5rem 0 0;
+  font-size: 0.8rem;
+  color: var(--go-bright);
+}
+
+.primary:disabled {
+  filter: grayscale(0.6);
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
 @media (max-width: 520px) {
   .actions {
     flex-wrap: wrap;

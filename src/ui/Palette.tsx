@@ -4,7 +4,12 @@
 
 import { getSpec } from '../game/catalog';
 import { useAppState, useDispatch } from '../game/context';
-import { countOfKind, limitForKind, spentBudget } from '../game/reducer';
+import {
+  countOfKind,
+  effectiveBudget,
+  limitForKind,
+  spentBudget,
+} from '../game/reducer';
 import styles from '../styles/Palette.module.css';
 
 export function Palette() {
@@ -14,7 +19,8 @@ export function Palette() {
 
   const { level, selectedKind, phase } = game;
   const building = phase === 'building';
-  const spent = level.budget !== undefined ? spentBudget(game) : 0;
+  const budget = effectiveBudget(game);
+  const spent = budget !== undefined ? spentBudget(game) : 0;
 
   return (
     <aside className={styles.palette}>
@@ -25,8 +31,7 @@ export function Palette() {
           const used = countOfKind(game, entry.kind);
           const limit = limitForKind(level, entry.kind);
           const remaining = limit - used;
-          const overBudget =
-            level.budget !== undefined && spent + spec.cost > level.budget;
+          const overBudget = budget !== undefined && spent + spec.cost > budget;
           const disabled = !building || remaining <= 0 || overBudget;
           const selected = selectedKind === entry.kind;
 

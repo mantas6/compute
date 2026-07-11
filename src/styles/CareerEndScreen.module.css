@@ -1,0 +1,246 @@
+.screen {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 2rem 1.25rem;
+  animation: fade 0.25s ease;
+}
+
+@keyframes fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.panel {
+  width: min(560px, 100%);
+  background: linear-gradient(180deg, var(--panel-2), var(--panel));
+  border: 1px solid var(--line-2);
+  border-radius: var(--radius-lg);
+  padding: 2rem 1.75rem 1.75rem;
+  box-shadow: 0 28px 80px rgba(0, 0, 0, 0.6);
+  animation: rise 0.3s cubic-bezier(0.2, 0.8, 0.3, 1);
+}
+
+.screen[data-kind='bankrupt'] .panel {
+  border-color: rgba(248, 81, 73, 0.55);
+  box-shadow:
+    0 28px 80px rgba(0, 0, 0, 0.6),
+    0 0 40px rgba(248, 81, 73, 0.12);
+}
+
+.screen[data-kind='complete'] .panel {
+  border-color: var(--gold);
+  box-shadow:
+    0 28px 80px rgba(0, 0, 0, 0.6),
+    0 0 44px rgba(227, 179, 65, 0.18);
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(14px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.eyebrow {
+  margin: 0 0 0.4rem;
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  color: var(--text-faint);
+}
+
+.title {
+  margin: 0;
+  font-family: var(--mono);
+  font-size: clamp(2.2rem, 8vw, 3rem);
+  font-weight: 800;
+  letter-spacing: 0.02em;
+}
+
+.bad {
+  color: var(--bad);
+  text-shadow: 0 0 24px rgba(248, 81, 73, 0.5);
+}
+
+.win {
+  background: linear-gradient(120deg, var(--gold), #f5d98a);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  text-shadow: 0 0 30px rgba(227, 179, 65, 0.35);
+}
+
+.tagline {
+  margin: 0.7rem 0 1.5rem;
+  color: var(--text-dim);
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+.summary {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.6rem;
+  margin-bottom: 1.4rem;
+}
+
+.stat {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: 0.75rem 0.85rem;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+}
+
+.statLabel {
+  font-size: 0.62rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-faint);
+}
+
+.statValue {
+  font-family: var(--mono);
+  font-size: 1.15rem;
+  font-weight: 700;
+}
+
+.medals {
+  list-style: none;
+  margin: 0 0 1.4rem;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.medalRow {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  background: rgba(8, 11, 16, 0.4);
+}
+
+.glyph {
+  font-size: 1rem;
+  width: 1.2rem;
+  text-align: center;
+}
+
+.levelName {
+  flex: 1;
+  font-size: 0.9rem;
+}
+
+.medalTag {
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.m_none {
+  color: var(--text-faint);
+}
+.m_bronze {
+  color: var(--bronze);
+}
+.m_silver {
+  color: var(--silver);
+}
+.m_gold {
+  color: var(--gold);
+  text-shadow: 0 0 10px rgba(227, 179, 65, 0.5);
+}
+
+.history {
+  margin-bottom: 1.4rem;
+}
+
+.historyLabel {
+  display: block;
+  font-size: 0.62rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-faint);
+  margin-bottom: 0.4rem;
+}
+
+.bars {
+  display: flex;
+  align-items: flex-end;
+  gap: 3px;
+  height: 44px;
+  padding: 0.4rem 0.5rem;
+  background: rgba(8, 11, 16, 0.5);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+}
+
+.bar {
+  flex: 1;
+  min-width: 3px;
+  border-radius: 2px 2px 0 0;
+  background: linear-gradient(180deg, var(--accent), var(--accent-2));
+  opacity: 0.85;
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.6rem;
+}
+
+.primary,
+.secondary {
+  font: inherit;
+  font-weight: 650;
+  font-size: 0.92rem;
+  padding: 0.55rem 1.1rem;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: filter 0.14s ease, border-color 0.14s ease, color 0.14s ease;
+}
+
+.primary {
+  background: linear-gradient(180deg, var(--go-bright), var(--go));
+  border: 1px solid var(--go-bright);
+  color: #04120a;
+  box-shadow: 0 0 16px rgba(52, 184, 87, 0.3);
+}
+
+.primary:hover {
+  filter: brightness(1.08);
+}
+
+.secondary {
+  background: transparent;
+  border: 1px solid var(--line-2);
+  color: var(--text-dim);
+}
+
+.secondary:hover {
+  border-color: var(--accent);
+  color: var(--text);
+}
+
+@media (max-width: 520px) {
+  .summary {
+    grid-template-columns: 1fr;
+  }
+}

@@ -13,31 +13,55 @@ import type {
   GameState,
   GridPos,
   LevelSpec,
+  Medal,
   PlacedComponent,
   RunResult,
   SimState,
 } from './types';
+import type { CareerState, LastRunEconomy } from './career';
+import {
+  MEDAL_RANK,
+  bankruptcyFloor,
+  betterMedal,
+  isComplete,
+  marginalPayout,
+  newCareer,
+} from './career';
 import { getSpec } from './catalog';
-import { getLevel } from './levels';
+import { LEVELS, getLevel } from './levels';
 
 // ---------------------------------------------------------------------------
 // App-level state
 // ---------------------------------------------------------------------------
 
 /**
- * Top-level application state. When `game` is null the UI shows the level
- * select screen; otherwise it shows the build/run screen for that session.
+ * Which top-level experience is active:
+ *   - 'menu'     — the mode-select landing screen.
+ *   - 'freeplay' — the original sandbox: every level open, level budgets only.
+ *   - 'career'   — the money campaign layered over the same levels.
+ */
+export type AppMode = 'menu' | 'freeplay' | 'career';
+
+/**
+ * Top-level application state. `mode` selects the experience; when `game` is
+ * null the UI shows the level-select (or menu) screen, otherwise the build/run
+ * screen for that session. `career` holds the campaign slice (null in Free
+ * Play), and is persisted to localStorage by the context layer.
  *
  * `nextId` is a monotonically increasing counter used to mint unique placed
  * component ids while keeping the reducer pure (no Date.now / random inside).
  */
 export interface AppState {
+  mode: AppMode;
   game: GameState | null;
+  career: CareerState | null;
   nextId: number;
 }
 
 export const initialAppState: AppState = {
+  mode: 'menu',
   game: null,
+  career: null,
   nextId: 1,
 };
 
@@ -46,6 +70,11 @@ export const initialAppState: AppState = {
 // ---------------------------------------------------------------------------
 
 export type Action =
+  // Mode / campaign flow
+  | { type: 'SELECT_MODE'; mode: AppMode }
+  | { type: 'NEW_CAREER' }
+  | { type: 'ABANDON_CAREER' }
+  | { type: 'BACK_TO_MENU' }
   // Level flow
   | { type: 'SELECT_LEVEL'; levelId: string }
   | { type: 'BACK_TO_LEVELS' }
@@ -83,7 +112,24 @@ export function createGameState(level: LevelSpec): GameState {
     phase: 'building',
     sim: null,
     result: null,
+    budgetOverride: null,
   };
+}
+
+/**
+ * A career session: identical to a free session but with the affordability cap
+ * pinned to the player's current money instead of the level's abstract budget.
+ */
+export function createCareerGameState(
+  level: LevelSpec,
+  money: number,
+): GameState {
+  return { ...createGameState(level), budgetOverride: money };
+}
+
+/** The effective spending cap for a session (money in career, else budget). */
+export function effectiveBudget(game: GameState): number | undefined {
+  return game.budgetOverride ?? game.level.budget;
 }
 
 /** True if the position lies inside the level's chassis. */
@@ -150,9 +196,11 @@ export function canPlace(
   const limit = limitForKind(level, kind);
   if (limit <= 0) return false;
   if (countOfKind(state, kind) >= limit) return false;
-  // Budget check (only when the level defines one).
-  if (level.budget !== undefined) {
-    if (spentBudget(state) + getSpec(kind).cost > level.budget) return false;
+  // Spending cap check: the level budget in Free Play, or the player's current
+  // money in Career (via budgetOverride).
+  const budget = effectiveBudget(state);
+  if (budget !== undefined) {
+    if (spentBudget(state) + getSpec(kind).cost > budget) return false;
   }
   return true;
 }
@@ -197,14 +245,108 @@ function removeComponent(game: GameState, componentId: string): GameState {
 }
 
 // ---------------------------------------------------------------------------
+// Career payout resolution
+// ---------------------------------------------------------------------------
+
+/**
+ * Apply a finished run's outcome to the career: award the marginal payout for
+ * an improved medal, record the best medal, unlock the next level on bronze+,
+ * capture the run economics for the Results overlay, and re-evaluate the
+ * win/bankruptcy status. Assumes `career.pending` is set (cost already
+ * committed at RUN); returns the career unchanged if not.
+ */
+function applyRunPayout(career: CareerState, medal: Medal): CareerState {
+  const pending = career.pending;
+  if (!pending) return career;
+
+  const { levelId, cost, medalBefore, moneyBefore } = pending;
+  const medalAfter = betterMedal(medalBefore, medal);
+  const payout = marginalPayout(levelId, medalBefore, medal);
+  const money = career.money + payout; // cost was already deducted at RUN
+  const best = { ...career.best, [levelId]: medalAfter };
+
+  // Completing a level at bronze+ unlocks the next one in sequence.
+  let unlocked = career.unlocked;
+  let unlockedNew = false;
+  const idx = LEVELS.findIndex((l) => l.id === levelId);
+  if (
+    MEDAL_RANK[medal] >= MEDAL_RANK.bronze &&
+    idx === unlocked - 1 &&
+    unlocked < LEVELS.length
+  ) {
+    unlocked += 1;
+    unlockedNew = true;
+  }
+
+  const lastRun: LastRunEconomy = {
+    levelId,
+    cost,
+    payout,
+    medalBefore,
+    medalAfter,
+    moneyBefore,
+    moneyAfter: money,
+    unlockedNew,
+  };
+
+  let next: CareerState = {
+    ...career,
+    money,
+    best,
+    unlocked,
+    lastRun,
+    pending: null,
+    moneyHistory: [...career.moneyHistory, money],
+  };
+
+  if (isComplete(next)) {
+    next = { ...next, status: 'complete' };
+  } else if (money < bankruptcyFloor(next)) {
+    next = { ...next, status: 'bankrupt' };
+  }
+
+  return next;
+}
+
+// ---------------------------------------------------------------------------
 // Reducer
 // ---------------------------------------------------------------------------
 
 export function reducer(state: AppState, action: Action): AppState {
   switch (action.type) {
+    case 'SELECT_MODE':
+      return { ...state, mode: action.mode, game: null };
+
+    case 'NEW_CAREER':
+      // Reset the campaign to a fresh bankroll and enter it.
+      return {
+        ...state,
+        mode: 'career',
+        career: newCareer(),
+        game: null,
+      };
+
+    case 'ABANDON_CAREER':
+      // Wipe the campaign and return to the mode-select landing screen.
+      return { ...state, mode: 'menu', career: null, game: null };
+
+    case 'BACK_TO_MENU':
+      return { ...state, mode: 'menu', game: null };
+
     case 'SELECT_LEVEL': {
       const level = getLevel(action.levelId);
       if (!level) return state;
+      if (state.mode === 'career') {
+        const career = state.career;
+        if (!career) return state;
+        const idx = LEVELS.findIndex((l) => l.id === level.id);
+        // Only unlocked levels are playable in Career.
+        if (idx < 0 || idx >= career.unlocked) return state;
+        return {
+          ...state,
+          game: createCareerGameState(level, career.money),
+        };
+      }
       return { ...state, game: createGameState(level) };
     }
 
@@ -291,12 +433,29 @@ export function reducer(state: AppState, action: Action): AppState {
         },
       };
 
-    // --- Simulation lifecycle placeholders (Task 4 drives these) ----------
-    case 'RUN':
+    // --- Simulation lifecycle (Task 4 runner drives TICK/FINISH) ----------
+    case 'RUN': {
       // The runner will populate `sim` via TICK; here we flip the phase and
       // clear any prior snapshot/result so overlays start from a clean slate.
+      // In Career Mode the build cost is *committed* now — deducted from money
+      // and never refunded, so a failed or aborted run means fried parts.
+      let career = state.career;
+      if (state.mode === 'career' && career) {
+        const cost = spentBudget(game);
+        career = {
+          ...career,
+          money: career.money - cost,
+          pending: {
+            levelId: game.level.id,
+            cost,
+            medalBefore: career.best[game.level.id] ?? 'none',
+            moneyBefore: career.money,
+          },
+        };
+      }
       return {
         ...state,
+        career,
         game: {
           ...game,
           phase: 'running',
@@ -306,22 +465,54 @@ export function reducer(state: AppState, action: Action): AppState {
           selectedComponentId: null,
         },
       };
+    }
 
     case 'TICK':
       return { ...state, game: { ...game, sim: action.sim } };
 
-    case 'FINISH':
+    case 'FINISH': {
+      const result = action.result;
+      let career = state.career;
+      if (state.mode === 'career' && career && career.pending) {
+        career = applyRunPayout(career, result.medal);
+      }
       return {
         ...state,
-        game: { ...game, phase: 'results', result: action.result },
+        career,
+        game: { ...game, phase: 'results', result },
       };
+    }
 
-    case 'STOP':
+    case 'STOP': {
       // Return to building, discarding the in-flight run.
-      return {
-        ...state,
-        game: { ...game, phase: 'building', sim: null, result: null },
+      let career = state.career;
+      let nextGame: GameState = {
+        ...game,
+        phase: 'building',
+        sim: null,
+        result: null,
       };
+      if (state.mode === 'career' && career) {
+        // Aborting a committed run: the money is already spent (parts fried);
+        // just clear the pending marker and record the balance.
+        if (career.pending) {
+          career = {
+            ...career,
+            pending: null,
+            moneyHistory: [...career.moneyHistory, career.money],
+          };
+        }
+        // Re-pin the affordability cap to whatever money remains.
+        nextGame = { ...nextGame, budgetOverride: career.money };
+        if (
+          career.status === 'active' &&
+          career.money < bankruptcyFloor(career)
+        ) {
+          career = { ...career, status: 'bankrupt' };
+        }
+      }
+      return { ...state, career, game: nextGame };
+    }
 
     default:
       return state;

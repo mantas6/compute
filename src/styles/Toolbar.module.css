@@ -249,6 +249,70 @@
   color: var(--bad);
 }
 
+/* --- Career build strip ------------------------------------------------- */
+
+.careerStrip {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.25rem;
+  flex-wrap: wrap;
+  padding: 0.55rem 1.1rem;
+  border-top: 1px solid var(--line);
+  background: rgba(8, 11, 16, 0.55);
+  max-width: 1240px;
+  margin: 0 auto;
+}
+
+.payouts {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.payoutsLabel {
+  font-size: 0.62rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-faint);
+}
+
+.payout {
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  font-weight: 600;
+  padding: 0.1rem 0.5rem;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+}
+
+.payout_bronze {
+  color: var(--bronze);
+}
+.payout_silver {
+  color: var(--silver);
+}
+.payout_gold {
+  color: var(--gold);
+}
+
+.payoutZero {
+  color: var(--text-faint);
+  opacity: 0.7;
+}
+
+.bankruptWarn {
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--bad);
+  padding: 0.2rem 0.6rem;
+  border: 1px solid rgba(248, 81, 73, 0.5);
+  border-radius: var(--radius-sm);
+  background: rgba(248, 81, 73, 0.1);
+  animation: pulse 1.4s ease-in-out infinite;
+}
+
 @media (max-width: 720px) {
   .stats {
     display: none;

@@ -5,8 +5,112 @@
 }
 
 .header {
+  position: relative;
   text-align: center;
-  margin-bottom: 2.75rem;
+  margin-bottom: 2rem;
+}
+
+.menuLink {
+  position: absolute;
+  top: 0;
+  left: 0;
+  background: transparent;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  color: var(--text-dim);
+  font: inherit;
+  font-size: 0.82rem;
+  padding: 0.4rem 0.75rem;
+  cursor: pointer;
+  transition: border-color 0.14s ease, color 0.14s ease;
+}
+
+.menuLink:hover {
+  border-color: var(--line-2);
+  color: var(--text);
+}
+
+/* --- Career header ------------------------------------------------------ */
+
+.careerBar {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 1rem 1.25rem;
+  margin-bottom: 2rem;
+  background: linear-gradient(180deg, var(--panel-2), var(--panel));
+  border: 1px solid var(--line-2);
+  border-radius: var(--radius-lg);
+}
+
+.bankroll {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.bankrollLabel {
+  font-size: 0.64rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-faint);
+}
+
+.bankrollValue {
+  font-family: var(--mono);
+  font-size: 1.9rem;
+  font-weight: 700;
+  color: var(--go-bright);
+  line-height: 1;
+}
+
+.careerStats {
+  display: flex;
+  gap: 1.75rem;
+  flex: 1;
+}
+
+.careerStats div {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.careerStatLabel {
+  font-size: 0.62rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-faint);
+}
+
+.careerStatValue {
+  font-family: var(--mono);
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+.abandon {
+  background: transparent;
+  border: 1px solid var(--line-2);
+  border-radius: var(--radius-sm);
+  color: var(--text-dim);
+  font: inherit;
+  font-size: 0.82rem;
+  padding: 0.45rem 0.85rem;
+  cursor: pointer;
+  transition: border-color 0.14s ease, color 0.14s ease;
+}
+
+.abandon:hover {
+  border-color: var(--bad);
+  color: var(--bad);
+}
+
+@media (max-width: 520px) {
+  .careerBar {
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
 }
 
 .brand {
@@ -234,4 +338,84 @@
 .card:hover .enter {
   opacity: 1;
   transform: translateX(0);
+}
+
+/* --- Career: locked cards, medal badges, payout column ------------------ */
+
+.card:disabled {
+  cursor: not-allowed;
+}
+
+.locked {
+  opacity: 0.55;
+  filter: grayscale(0.4);
+}
+
+.locked:hover {
+  transform: none;
+  border-color: var(--line);
+  box-shadow: none;
+}
+
+.locked:hover::before {
+  opacity: 0;
+}
+
+.medalBadge {
+  font-family: var(--mono);
+  font-size: 0.66rem;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  padding: 0.16rem 0.5rem;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  color: var(--text-faint);
+  white-space: nowrap;
+}
+
+.badge_bronze {
+  color: var(--bronze);
+  border-color: rgba(208, 138, 78, 0.5);
+}
+.badge_silver {
+  color: var(--silver);
+  border-color: rgba(200, 209, 218, 0.45);
+}
+.badge_gold {
+  color: var(--gold);
+  border-color: rgba(227, 179, 65, 0.55);
+  box-shadow: 0 0 8px rgba(227, 179, 65, 0.2);
+}
+
+.criteria thead th:last-child,
+.criteria tbody td.payoutCell {
+  border-left: 1px solid var(--line);
+  padding-left: 0.55rem;
+}
+
+.payoutCell {
+  color: var(--go-bright) !important;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.earnedMark {
+  margin-left: 0.3rem;
+  color: var(--go-bright);
+}
+
+.earnedRow td,
+.earnedRow th[scope='row'] {
+  color: var(--text);
+}
+
+.earnedRow {
+  background: rgba(52, 184, 87, 0.06);
+}
+
+.replayNote {
+  margin: 0.75rem 0 0;
+  font-size: 0.74rem;
+  color: var(--text-faint);
+  font-style: italic;
 }

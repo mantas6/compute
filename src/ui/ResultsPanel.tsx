@@ -3,6 +3,8 @@
 // power — against each scoring tier, then offers retry / back-to-levels.
 
 import { useAppState, useDispatch } from '../game/context';
+import { spentBudget } from '../game/reducer';
+import type { LastRunEconomy } from '../game/career';
 import type { CriteriaTier, Medal, RunResult } from '../game/types';
 import styles from '../styles/ResultsPanel.module.css';
 
@@ -14,12 +16,21 @@ const MEDAL_LABEL: Record<Medal, string> = {
 };
 
 export function ResultsPanel() {
-  const { game } = useAppState();
+  const { game, mode, career } = useAppState();
   const dispatch = useDispatch();
   if (!game || game.phase !== 'results' || !game.result) return null;
 
   const { result, level } = game;
   const { criteria } = level;
+
+  // Career economics for this run (career slice, not persisted into GameState).
+  const isCareer = mode === 'career' && career != null;
+  const econ: LastRunEconomy | null =
+    isCareer && career!.lastRun && career!.lastRun.levelId === level.id
+      ? career!.lastRun
+      : null;
+  // A replay must still be affordable (build cost is committed again on Run).
+  const canReplay = !isCareer || career!.money >= spentBudget(game);
 
   return (
     <div className={styles.backdrop}>
@@ -40,6 +51,8 @@ export function ResultsPanel() {
             </p>
           </div>
         </div>
+
+        {econ && <MoneyDelta econ={econ} />}
 
         <table className={styles.table}>
           <thead>
@@ -97,6 +110,12 @@ export function ResultsPanel() {
           <button
             type="button"
             className={styles.primary}
+            disabled={!canReplay}
+            title={
+              canReplay
+                ? undefined
+                : "You can't afford to run this build again"
+            }
             onClick={() => {
               // Reset to a clean build snapshot, then immediately re-run it.
               dispatch({ type: 'STOP' });
@@ -107,6 +126,46 @@ export function ResultsPanel() {
           </button>
         </div>
       </div>
+    </div>
+  );
+}
+
+/** Career money breakdown for the finished run: −cost, +payout, net, balance. */
+function MoneyDelta({ econ }: { econ: LastRunEconomy }) {
+  const net = econ.payout - econ.cost;
+  const improved = econ.medalAfter !== econ.medalBefore;
+  return (
+    <div className={styles.money}>
+      <div className={styles.moneyRow}>
+        <span className={styles.moneyLabel}>Build committed</span>
+        <span className={styles.moneyNeg}>−${econ.cost}</span>
+      </div>
+      <div className={styles.moneyRow}>
+        <span className={styles.moneyLabel}>
+          Payout
+          {econ.payout > 0
+            ? improved
+              ? ` (${econ.medalBefore === 'none' ? 'cleared' : 'upgraded to ' + econ.medalAfter})`
+              : ''
+            : ' (no improvement)'}
+        </span>
+        <span className={econ.payout > 0 ? styles.moneyPos : styles.moneyDim}>
+          {econ.payout > 0 ? `+$${econ.payout}` : '$0'}
+        </span>
+      </div>
+      <div className={`${styles.moneyRow} ${styles.moneyNet}`}>
+        <span className={styles.moneyLabel}>Net</span>
+        <span className={net >= 0 ? styles.moneyPos : styles.moneyNeg}>
+          {net >= 0 ? `+$${net}` : `−$${Math.abs(net)}`}
+        </span>
+      </div>
+      <div className={`${styles.moneyRow} ${styles.moneyBalance}`}>
+        <span className={styles.moneyLabel}>New balance</span>
+        <span className={styles.moneyValue}>${econ.moneyAfter}</span>
+      </div>
+      {econ.unlockedNew && (
+        <p className={styles.unlockNote}>✓ Next level unlocked</p>
+      )}
     </div>
   );
 }

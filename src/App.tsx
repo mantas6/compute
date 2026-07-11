@@ -5,12 +5,14 @@
 import { useEffect, useRef } from 'react';
 import { GameProvider, useAppState, useDispatch } from './game/context';
 import { startRun } from './game/sim/runner';
+import { ModeSelect } from './ui/ModeSelect';
 import { LevelSelect } from './ui/LevelSelect';
 import { Toolbar } from './ui/Toolbar';
 import { Palette } from './ui/Palette';
 import { ChassisGrid } from './ui/ChassisGrid';
 import { ComponentInfo } from './ui/ComponentInfo';
 import { ResultsPanel } from './ui/ResultsPanel';
+import { CareerEndScreen } from './ui/CareerEndScreen';
 import styles from './styles/App.module.css';
 
 /**
@@ -40,8 +42,19 @@ function RunController() {
 }
 
 function Screen() {
-  const { game } = useAppState();
+  const { mode, game, career } = useAppState();
 
+  // Mode-select landing screen.
+  if (mode === 'menu') {
+    return <ModeSelect />;
+  }
+
+  // Career game-over / win screens take over the whole view.
+  if (mode === 'career' && career && career.status !== 'active') {
+    return <CareerEndScreen />;
+  }
+
+  // Level select (career or free play) when no session is active.
   if (!game) {
     return <LevelSelect />;
   }
