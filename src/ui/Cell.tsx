@@ -40,10 +40,11 @@ function heatStyle(
 ): React.CSSProperties {
   const span = Math.max(1, maxTemp - ambient);
   const r = clamp01((temp - ambient) / span);
-  if (r < 0.02) return { opacity: 0 };
-  const hue = 48 - 48 * r; // amber (cool-warm) -> red (hot)
-  const alpha = 0.18 + 0.6 * r;
-  return { backgroundColor: `hsla(${hue}, 90%, 50%, ${alpha})`, opacity: 1 };
+  if (r < 0.03) return { opacity: 0 };
+  // 55° (warm amber) -> 0° (hot red), deepening as the cell approaches its max.
+  const hue = 55 - 55 * r;
+  const alpha = 0.14 + 0.62 * r;
+  return { backgroundColor: `hsla(${hue}, 92%, 52%, ${alpha})`, opacity: 1 };
 }
 
 export function Cell({

@@ -33,7 +33,10 @@ export function Toolbar() {
           </button>
           <div className={styles.titleGroup}>
             <span className={styles.name}>{level.name}</span>
-            <span className={styles.phase}>{phase}</span>
+            <span className={styles.phase} data-phase={phase}>
+              <span className={styles.phaseDot} aria-hidden />
+              {phase}
+            </span>
           </div>
         </div>
 

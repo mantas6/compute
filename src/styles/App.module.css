@@ -6,10 +6,13 @@
 
 .workspace {
   flex: 1;
+  width: 100%;
+  max-width: 1240px;
+  margin: 0 auto;
   display: grid;
-  grid-template-columns: 240px 1fr 280px;
+  grid-template-columns: 232px minmax(0, 1fr) 288px;
   gap: 1rem;
-  padding: 1rem;
+  padding: 1.25rem;
   align-items: start;
 }
 
@@ -17,11 +20,17 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: 60vh;
+  min-height: 62vh;
 }
 
-@media (max-width: 900px) {
+@media (max-width: 960px) {
   .workspace {
     grid-template-columns: 1fr;
+    max-width: 560px;
+  }
+
+  .stage {
+    min-height: auto;
+    order: -1;
   }
 }

@@ -1,23 +1,57 @@
 .stage {
-  --cell-size: 72px;
-  padding: 1rem;
-  background: #1c1c1c;
-  border: 1px solid #333;
-  border-radius: 12px;
+  --cell-size: 74px;
+  position: relative;
+  padding: 1.25rem;
+  background:
+    radial-gradient(
+      circle at 1px 1px,
+      rgba(70, 212, 224, 0.07) 1px,
+      transparent 0
+    ),
+    linear-gradient(180deg, var(--panel-2), var(--panel));
+  background-size:
+    18px 18px,
+    100% 100%;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  box-shadow:
+    inset 0 0 60px rgba(0, 0, 0, 0.35),
+    0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+/* Corner mounting-hole flourishes to sell the "board" feel. */
+.stage::before,
+.stage::after {
+  content: '';
+  position: absolute;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--bg);
+  box-shadow: 0 0 0 2px var(--line);
+}
+.stage::before {
+  top: 10px;
+  left: 10px;
+}
+.stage::after {
+  bottom: 10px;
+  right: 10px;
 }
 
 .grid {
   display: grid;
-  gap: 4px;
+  gap: 5px;
 }
 
 .cell {
+  --k: var(--line-2);
   position: relative;
   width: var(--cell-size);
   height: var(--cell-size);
-  border: 1px solid #333;
+  border: 1px solid var(--line);
   border-radius: 8px;
-  background: #262626;
+  background: var(--elev);
   color: inherit;
   font: inherit;
   cursor: pointer;
@@ -26,9 +60,67 @@
   padding: 0;
   overflow: hidden;
   transition:
-    border-color 0.1s ease,
-    background 0.1s ease,
-    box-shadow 0.1s ease;
+    border-color 0.12s ease,
+    background 0.12s ease,
+    box-shadow 0.12s ease,
+    transform 0.08s ease;
+}
+
+/* Empty cells read as bare solder pads. */
+.empty::after {
+  content: '';
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--line);
+  opacity: 0.6;
+}
+
+.cell:disabled {
+  cursor: default;
+}
+
+.empty:hover:not(:disabled) {
+  border-color: var(--line-2);
+  background: #1f2b3a;
+}
+
+.empty:hover:not(:disabled)::after {
+  opacity: 0;
+}
+
+.placeable {
+  border-style: dashed;
+  border-color: var(--accent);
+  background: rgba(70, 212, 224, 0.08);
+}
+
+.placeable::after {
+  background: var(--accent);
+  opacity: 0.7;
+}
+
+.placeable:hover:not(:disabled) {
+  background: rgba(70, 212, 224, 0.16);
+  box-shadow: 0 0 0 1px var(--accent) inset;
+}
+
+.occupied {
+  border-color: color-mix(in srgb, var(--k) 45%, var(--line));
+}
+
+.occupied:hover:not(:disabled) {
+  transform: translateY(-1px);
+  border-color: var(--k);
+}
+
+.selected {
+  box-shadow:
+    0 0 0 2px var(--accent),
+    0 0 14px rgba(70, 212, 224, 0.4);
+  border-color: var(--accent);
+  z-index: 3;
 }
 
 /* Heat overlay: absolutely-positioned wash behind the glyph. */
@@ -42,7 +134,7 @@
     opacity 0.18s linear;
 }
 
-/* Small power indicator dot in the corner during a run. */
+/* Power indicator dot in the corner during a run. */
 .power {
   position: absolute;
   top: 5px;
@@ -51,58 +143,39 @@
   height: 8px;
   border-radius: 50%;
   pointer-events: none;
-  z-index: 2;
+  z-index: 3;
 }
 
 .powered {
-  background: #49d17a;
-  box-shadow: 0 0 6px #49d17a;
+  background: var(--go-bright);
+  box-shadow: 0 0 7px var(--go-bright);
 }
 
 .starved {
-  background: #ff6b6b;
-  box-shadow: 0 0 6px #ff6b6b;
+  background: var(--bad);
+  box-shadow: 0 0 7px var(--bad);
+  animation: pulse 0.9s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  50% {
+    opacity: 0.35;
+  }
 }
 
 .overheating {
   animation: overheatPulse 0.7s ease-in-out infinite;
+  z-index: 2;
 }
 
 @keyframes overheatPulse {
   0%,
   100% {
-    box-shadow: 0 0 0 2px rgba(255, 80, 60, 0.9);
+    box-shadow: 0 0 0 2px rgba(248, 81, 73, 0.9);
   }
   50% {
-    box-shadow: 0 0 0 3px rgba(255, 120, 60, 0.4);
+    box-shadow: 0 0 10px 2px rgba(240, 120, 60, 0.55);
   }
-}
-
-.cell:disabled {
-  cursor: default;
-}
-
-.empty:hover:not(:disabled) {
-  border-color: #4a4a4a;
-}
-
-.placeable {
-  border-style: dashed;
-  border-color: #5b8def;
-  background: #21283a;
-}
-
-.placeable:hover:not(:disabled) {
-  background: #29344d;
-}
-
-.occupied {
-  border-color: #444;
-}
-
-.selected {
-  box-shadow: 0 0 0 2px #5b8def;
-  border-color: #5b8def;
 }
 
 .glyph {
@@ -110,29 +183,45 @@
   z-index: 1;
   display: grid;
   place-items: center;
-  width: 70%;
-  height: 70%;
-  border-radius: 6px;
+  width: 74%;
+  height: 74%;
+  border-radius: var(--radius-sm);
+  font-family: var(--mono);
   font-weight: 700;
-  font-size: 1.1rem;
-  background: #3a3a3a;
+  font-size: 1.15rem;
+  color: #fff;
+  background: linear-gradient(
+    155deg,
+    color-mix(in srgb, var(--k) 92%, #fff 8%),
+    var(--k)
+  );
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.16),
+    0 1px 3px rgba(0, 0, 0, 0.4);
 }
 
-.cell[data-kind='psu'] .glyph {
-  background: #6b4fb3;
+/* Per-kind accent color drives both the glyph and the cell border tint. */
+.cell[data-kind='psu'] {
+  --k: var(--k-psu);
 }
-.cell[data-kind='interface'] .glyph {
-  background: #3f6f8f;
+.cell[data-kind='interface'] {
+  --k: var(--k-interface);
 }
-.cell[data-kind='cpu'] .glyph {
-  background: #b3543f;
+.cell[data-kind='cpu'] {
+  --k: var(--k-cpu);
 }
-.cell[data-kind='ram'] .glyph {
-  background: #3f8f6b;
+.cell[data-kind='ram'] {
+  --k: var(--k-ram);
 }
-.cell[data-kind='heatsink'] .glyph {
-  background: #7a7a7a;
+.cell[data-kind='heatsink'] {
+  --k: var(--k-heatsink);
 }
-.cell[data-kind='fan'] .glyph {
-  background: #4f7db3;
+.cell[data-kind='fan'] {
+  --k: var(--k-fan);
+}
+
+@media (max-width: 960px) {
+  .stage {
+    --cell-size: min(64px, 15vw);
+  }
 }

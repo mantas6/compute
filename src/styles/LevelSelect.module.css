@@ -1,23 +1,50 @@
 .screen {
-  max-width: 960px;
+  max-width: 1000px;
   margin: 0 auto;
-  padding: 3rem 1.5rem;
+  padding: clamp(2rem, 6vw, 4.5rem) 1.5rem 3.5rem;
 }
 
 .header {
   text-align: center;
-  margin-bottom: 2.5rem;
+  margin-bottom: 2.75rem;
+}
+
+.brand {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.5rem;
+}
+
+.prompt {
+  font-family: var(--mono);
+  font-size: clamp(1.8rem, 5vw, 2.6rem);
+  color: var(--accent);
+  animation: blink 1.2s steps(1) infinite;
+}
+
+@keyframes blink {
+  50% {
+    opacity: 0.25;
+  }
 }
 
 .title {
-  font-size: 3rem;
+  font-family: var(--mono);
+  font-size: clamp(2.2rem, 6vw, 3.2rem);
   margin: 0;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.03em;
+  font-weight: 700;
+  background: linear-gradient(120deg, var(--text), var(--accent));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
 }
 
 .subtitle {
-  margin: 0.5rem 0 0;
-  color: rgba(255, 255, 255, 0.6);
+  margin: 0.9rem auto 0;
+  max-width: 30rem;
+  color: var(--text-dim);
+  font-size: 0.98rem;
 }
 
 .list {
@@ -25,77 +52,186 @@
   margin: 0;
   padding: 0;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(288px, 1fr));
+  gap: 1.1rem;
 }
 
 .card {
+  position: relative;
   width: 100%;
+  height: 100%;
   text-align: left;
-  background: #242424;
-  border: 1px solid #3a3a3a;
-  border-radius: 10px;
-  padding: 1.1rem 1.25rem;
+  background: linear-gradient(180deg, var(--panel-2), var(--panel));
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  padding: 1.15rem 1.25rem 1.25rem;
   color: inherit;
   font: inherit;
   cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
   transition:
-    border-color 0.15s ease,
-    transform 0.1s ease,
-    background 0.15s ease;
+    border-color 0.16s ease,
+    transform 0.14s ease,
+    box-shadow 0.16s ease;
+}
+
+/* Top hairline accent that lights up on hover. */
+.card::before {
+  content: '';
+  position: absolute;
+  inset: 0 0 auto;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--accent), transparent);
+  opacity: 0;
+  transition: opacity 0.16s ease;
 }
 
 .card:hover {
-  border-color: #5b8def;
-  background: #2a2a2a;
-  transform: translateY(-2px);
+  border-color: var(--line-2);
+  transform: translateY(-3px);
+  box-shadow:
+    0 12px 30px rgba(0, 0, 0, 0.45),
+    0 0 0 1px rgba(70, 212, 224, 0.15);
+}
+
+.card:hover::before {
+  opacity: 1;
 }
 
 .cardHead {
   display: flex;
   align-items: baseline;
-  justify-content: space-between;
-  gap: 0.5rem;
+  gap: 0.6rem;
+}
+
+.index {
+  font-family: var(--mono);
+  font-size: 0.8rem;
+  color: var(--accent);
+  opacity: 0.8;
 }
 
 .name {
   font-size: 1.2rem;
-  font-weight: 600;
+  font-weight: 650;
+  flex: 1;
 }
 
 .grid {
-  font-size: 0.8rem;
-  color: rgba(255, 255, 255, 0.5);
-  font-variant-numeric: tabular-nums;
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  color: var(--text-faint);
+  padding: 0.12rem 0.45rem;
+  border: 1px solid var(--line);
+  border-radius: 999px;
 }
 
 .desc {
-  margin: 0.5rem 0 0.9rem;
-  color: rgba(255, 255, 255, 0.65);
-  font-size: 0.9rem;
-  line-height: 1.4;
+  margin: 0.6rem 0 0.9rem;
+  color: var(--text-dim);
+  font-size: 0.88rem;
+  line-height: 1.45;
 }
 
 .meta {
   display: flex;
-  gap: 1.25rem;
-  margin: 0;
+  gap: 1.4rem;
+  margin: 0 0 1rem;
+  padding-bottom: 0.9rem;
+  border-bottom: 1px solid var(--line);
 }
 
 .meta div {
   display: flex;
   flex-direction: column;
+  gap: 0.15rem;
 }
 
 .meta dt {
-  font-size: 0.7rem;
+  font-size: 0.66rem;
   text-transform: uppercase;
-  letter-spacing: 0.04em;
-  color: rgba(255, 255, 255, 0.45);
+  letter-spacing: 0.06em;
+  color: var(--text-faint);
 }
 
 .meta dd {
   margin: 0;
+  font-family: var(--mono);
   font-weight: 600;
-  font-variant-numeric: tabular-nums;
+  font-size: 0.95rem;
+}
+
+.criteria {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  margin-top: auto;
+}
+
+.criteria th,
+.criteria td {
+  padding: 0.28rem 0.2rem;
+  text-align: right;
+}
+
+.criteria thead th {
+  font-size: 0.62rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-faint);
+  border-bottom: 1px solid var(--line);
+}
+
+.criteria tbody th[scope='row'] {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  text-align: left;
+  font-weight: 600;
+  color: var(--text-dim);
+}
+
+.criteria td {
+  color: var(--text-dim);
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.tier_bronze .dot {
+  background: var(--bronze);
+  box-shadow: 0 0 6px rgba(208, 138, 78, 0.6);
+}
+.tier_silver .dot {
+  background: var(--silver);
+  box-shadow: 0 0 6px rgba(200, 209, 218, 0.5);
+}
+.tier_gold .dot {
+  background: var(--gold);
+  box-shadow: 0 0 6px rgba(227, 179, 65, 0.6);
+}
+
+.enter {
+  margin-top: 1rem;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--accent);
+  opacity: 0;
+  transform: translateX(-4px);
+  transition:
+    opacity 0.16s ease,
+    transform 0.16s ease;
+}
+
+.card:hover .enter {
+  opacity: 1;
+  transform: translateX(0);
 }

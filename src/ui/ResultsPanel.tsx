@@ -24,6 +24,7 @@ export function ResultsPanel() {
   return (
     <div className={styles.backdrop}>
       <div className={styles.panel} role="dialog" aria-modal>
+        <p className={styles.eyebrow}>{level.name} · run complete</p>
         <div className={`${styles.medal} ${styles[`medal_${result.medal}`]}`}>
           <span className={styles.medalIcon} aria-hidden>
             {result.medal === 'none' ? '✕' : '★'}
@@ -88,10 +89,21 @@ export function ResultsPanel() {
           </button>
           <button
             type="button"
-            className={styles.primary}
+            className={styles.secondary}
             onClick={() => dispatch({ type: 'STOP' })}
           >
-            Retry
+            Edit build
+          </button>
+          <button
+            type="button"
+            className={styles.primary}
+            onClick={() => {
+              // Reset to a clean build snapshot, then immediately re-run it.
+              dispatch({ type: 'STOP' });
+              dispatch({ type: 'RUN' });
+            }}
+          >
+            ▶ Run again
           </button>
         </div>
       </div>

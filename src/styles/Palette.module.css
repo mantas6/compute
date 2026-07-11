@@ -1,16 +1,19 @@
 .palette {
-  background: #202020;
-  border: 1px solid #333;
-  border-radius: 10px;
+  background: linear-gradient(180deg, var(--panel-2), var(--panel));
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
   padding: 1rem;
+  position: sticky;
+  top: 5.25rem;
 }
 
 .heading {
-  margin: 0 0 0.75rem;
-  font-size: 0.8rem;
+  margin: 0 0 0.85rem;
+  font-family: var(--mono);
+  font-size: 0.72rem;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
-  color: rgba(255, 255, 255, 0.55);
+  letter-spacing: 0.1em;
+  color: var(--text-dim);
 }
 
 .list {
@@ -23,12 +26,14 @@
 }
 
 .item {
+  --accent-k: var(--line-2);
+  position: relative;
   width: 100%;
   display: flex;
   align-items: center;
   gap: 0.7rem;
-  background: #2a2a2a;
-  border: 1px solid #383838;
+  background: var(--elev);
+  border: 1px solid var(--line);
   border-radius: 8px;
   padding: 0.55rem 0.7rem;
   color: inherit;
@@ -37,16 +42,19 @@
   text-align: left;
   transition:
     border-color 0.12s ease,
-    background 0.12s ease;
+    background 0.12s ease,
+    transform 0.1s ease;
 }
 
 .item:hover:not(:disabled) {
-  border-color: #5b8def;
+  border-color: var(--accent-k);
+  transform: translateX(2px);
 }
 
 .item.selected {
-  border-color: #5b8def;
-  background: #29344d;
+  border-color: var(--accent-k);
+  background: color-mix(in srgb, var(--accent-k) 16%, var(--elev));
+  box-shadow: 0 0 0 1px var(--accent-k) inset;
 }
 
 .item:disabled {
@@ -57,18 +65,22 @@
 .glyph {
   display: grid;
   place-items: center;
-  width: 2rem;
-  height: 2rem;
-  border-radius: 6px;
+  width: 2.1rem;
+  height: 2.1rem;
+  border-radius: var(--radius-sm);
+  font-family: var(--mono);
   font-weight: 700;
-  background: #3a3a3a;
+  color: #fff;
+  background: var(--accent-k);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.14);
   flex-shrink: 0;
 }
 
 .info {
   display: flex;
   flex-direction: column;
-  line-height: 1.25;
+  line-height: 1.3;
+  min-width: 0;
 }
 
 .name {
@@ -76,34 +88,46 @@
 }
 
 .sub {
-  font-size: 0.78rem;
-  color: rgba(255, 255, 255, 0.5);
-  font-variant-numeric: tabular-nums;
+  font-family: var(--mono);
+  font-size: 0.74rem;
+  color: var(--text-faint);
 }
 
 .hint {
   margin: 0.9rem 0 0;
-  font-size: 0.78rem;
-  line-height: 1.4;
-  color: rgba(255, 255, 255, 0.45);
+  font-size: 0.76rem;
+  line-height: 1.45;
+  color: var(--text-faint);
+  border-top: 1px solid var(--line);
+  padding-top: 0.75rem;
 }
 
-/* Component accent colors, shared by palette glyphs and grid cells. */
-.glyph[data-kind='psu'] {
-  background: #6b4fb3;
+/* Per-kind accent, applied to the whole item so hover/selection tint matches. */
+.item[data-kind='psu'] {
+  --accent-k: var(--k-psu);
 }
-.glyph[data-kind='interface'] {
-  background: #3f6f8f;
+.item[data-kind='interface'] {
+  --accent-k: var(--k-interface);
 }
-.glyph[data-kind='cpu'] {
-  background: #b3543f;
+.item[data-kind='cpu'] {
+  --accent-k: var(--k-cpu);
 }
-.glyph[data-kind='ram'] {
-  background: #3f8f6b;
+.item[data-kind='ram'] {
+  --accent-k: var(--k-ram);
 }
-.glyph[data-kind='heatsink'] {
-  background: #7a7a7a;
+.item[data-kind='heatsink'] {
+  --accent-k: var(--k-heatsink);
 }
-.glyph[data-kind='fan'] {
-  background: #4f7db3;
+.item[data-kind='fan'] {
+  --accent-k: var(--k-fan);
+}
+
+@media (max-width: 960px) {
+  .palette {
+    position: static;
+  }
+  .list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  }
 }

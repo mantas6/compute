@@ -34,8 +34,10 @@ export function Palette() {
             <li key={entry.kind}>
               <button
                 type="button"
+                data-kind={entry.kind}
                 className={`${styles.item} ${selected ? styles.selected : ''}`}
                 disabled={disabled}
+                title={spec.description}
                 onClick={() =>
                   dispatch({
                     type: 'SELECT_KIND',
@@ -43,9 +45,7 @@ export function Palette() {
                   })
                 }
               >
-                <span className={styles.glyph} data-kind={entry.kind}>
-                  {spec.label}
-                </span>
+                <span className={styles.glyph}>{spec.label}</span>
                 <span className={styles.info}>
                   <span className={styles.name}>{spec.name}</span>
                   <span className={styles.sub}>

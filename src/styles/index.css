@@ -1,9 +1,60 @@
+/* Global design tokens + base styles.
+ *
+ * Theme: a dark "diagnostic terminal / PCB bench" aesthetic. Cool near-black
+ * surfaces, a cyan signal accent, green for power-good / go, and an
+ * amber -> red gradient reserved for heat. Numeric readouts use a monospace
+ * face so stats line up like a scope readout. */
+
 :root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  /* Surfaces */
+  --bg: #080b10;
+  --panel: #0f151d;
+  --panel-2: #131b25;
+  --elev: #1a2432;
+  --line: #223041;
+  --line-2: #2f4358;
+
+  /* Text */
+  --text: #e6edf3;
+  --text-dim: #97a6b6;
+  --text-faint: #5c6b7a;
+
+  /* Signal / status */
+  --accent: #46d4e0; /* cyan — selection, routing, power signal */
+  --accent-2: #58a6ff; /* blue — links / secondary */
+  --go: #34b857; /* green — run / power-good */
+  --go-bright: #56d364;
+  --warn: #f0a63a; /* amber */
+  --bad: #f85149; /* red — starved / overheat / fail */
+
+  /* Medals */
+  --gold: #e3b341;
+  --silver: #c8d1da;
+  --bronze: #d08a4e;
+
+  /* Component accents (shared by palette, grid, info panels) */
+  --k-psu: #a371f7;
+  --k-interface: #37a7bd;
+  --k-cpu: #f0703c;
+  --k-ram: #3fb98a;
+  --k-heatsink: #8b98a5;
+  --k-fan: #4d8ef7;
+
+  /* Shape + type */
+  --radius: 10px;
+  --radius-sm: 6px;
+  --radius-lg: 14px;
+  --mono: 'SFMono-Regular', ui-monospace, 'JetBrains Mono', 'Fira Code', Menlo,
+    Consolas, monospace;
+  --sans: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+
+  font-family: var(--sans);
   line-height: 1.5;
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #1a1a1a;
+  color-scheme: dark;
+  color: var(--text);
+  background-color: var(--bg);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
 }
 
 * {
@@ -13,19 +64,28 @@
 body {
   margin: 0;
   min-height: 100vh;
+  color: var(--text);
+  /* Faint PCB grid: fine dotted mesh over a subtle vertical gradient. */
+  background-color: var(--bg);
+  background-image:
+    radial-gradient(circle at center, rgba(70, 212, 224, 0.06) 0, transparent 1px),
+    linear-gradient(180deg, #0a0f16 0%, var(--bg) 60%);
+  background-size:
+    24px 24px,
+    100% 100%;
+  background-attachment: fixed;
 }
 
-.app {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  min-height: 100vh;
-  gap: 0.5rem;
-  text-align: center;
+button {
+  font-family: inherit;
 }
 
-h1 {
-  font-size: 3.2rem;
-  margin: 0;
+/* Shared focus ring for keyboard users. */
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+::selection {
+  background: rgba(70, 212, 224, 0.28);
 }
