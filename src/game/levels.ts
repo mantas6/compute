@@ -67,14 +67,14 @@ export const LEVELS: LevelSpec[] = [
     ],
     thermal: {
       ambient: 30,
-      heatScale: 0.7,
+      heatScale: 0.5,
       baselineDissipation: 0.06,
       neighborSpread: 0.12,
     },
     criteria: {
       bronze: { maxTime: 30, maxPeakTemp: 92, maxPower: 110 },
       silver: { maxTime: 22, maxPeakTemp: 78, maxPower: 90 },
-      gold: { maxTime: 16, maxPeakTemp: 66, maxPower: 78 },
+      gold: { maxTime: 16, maxPeakTemp: 66, maxPower: 85 },
     },
   },
 
@@ -101,7 +101,7 @@ export const LEVELS: LevelSpec[] = [
     ],
     thermal: {
       ambient: 32,
-      heatScale: 0.75,
+      heatScale: 0.5,
       baselineDissipation: 0.05,
       neighborSpread: 0.1,
     },

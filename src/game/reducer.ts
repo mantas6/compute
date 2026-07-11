@@ -293,14 +293,17 @@ export function reducer(state: AppState, action: Action): AppState {
 
     // --- Simulation lifecycle placeholders (Task 4 drives these) ----------
     case 'RUN':
-      // The runner will populate `sim` via TICK; here we only flip the phase.
+      // The runner will populate `sim` via TICK; here we flip the phase and
+      // clear any prior snapshot/result so overlays start from a clean slate.
       return {
         ...state,
         game: {
           ...game,
           phase: 'running',
+          sim: null,
           result: null,
           selectedKind: null,
+          selectedComponentId: null,
         },
       };
 

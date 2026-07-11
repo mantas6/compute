@@ -12,6 +12,7 @@
 }
 
 .cell {
+  position: relative;
   width: var(--cell-size);
   height: var(--cell-size);
   border: 1px solid #333;
@@ -23,10 +24,58 @@
   display: grid;
   place-items: center;
   padding: 0;
+  overflow: hidden;
   transition:
     border-color 0.1s ease,
     background 0.1s ease,
     box-shadow 0.1s ease;
+}
+
+/* Heat overlay: absolutely-positioned wash behind the glyph. */
+.heat {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  transition:
+    background-color 0.18s linear,
+    opacity 0.18s linear;
+}
+
+/* Small power indicator dot in the corner during a run. */
+.power {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.powered {
+  background: #49d17a;
+  box-shadow: 0 0 6px #49d17a;
+}
+
+.starved {
+  background: #ff6b6b;
+  box-shadow: 0 0 6px #ff6b6b;
+}
+
+.overheating {
+  animation: overheatPulse 0.7s ease-in-out infinite;
+}
+
+@keyframes overheatPulse {
+  0%,
+  100% {
+    box-shadow: 0 0 0 2px rgba(255, 80, 60, 0.9);
+  }
+  50% {
+    box-shadow: 0 0 0 3px rgba(255, 120, 60, 0.4);
+  }
 }
 
 .cell:disabled {
@@ -57,6 +106,8 @@
 }
 
 .glyph {
+  position: relative;
+  z-index: 1;
   display: grid;
   place-items: center;
   width: 70%;

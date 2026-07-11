@@ -1,11 +1,14 @@
+.header {
+  background: #202020;
+  border-bottom: 1px solid #333;
+}
+
 .bar {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
   padding: 0.75rem 1rem;
-  background: #202020;
-  border-bottom: 1px solid #333;
 }
 
 .left,
@@ -93,4 +96,92 @@
 .run:disabled {
   opacity: 0.45;
   cursor: not-allowed;
+}
+
+.stop {
+  background: #7d2f2f;
+  border: 1px solid #9a3a3a;
+  border-radius: 6px;
+  color: #fff;
+  font: inherit;
+  font-weight: 600;
+  padding: 0.45rem 1rem;
+  cursor: pointer;
+}
+
+.stop:hover {
+  background: #933b3b;
+}
+
+/* --- Run status strip --------------------------------------------------- */
+
+.status {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 0.6rem 1rem;
+  border-top: 1px solid #2c2c2c;
+  background: #1b1b1b;
+}
+
+.progressWrap {
+  flex: 1;
+  min-width: 160px;
+}
+
+.progressLabel {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: rgba(255, 255, 255, 0.5);
+  margin-bottom: 0.3rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.progressTrack {
+  height: 8px;
+  border-radius: 999px;
+  background: #2c2c2c;
+  overflow: hidden;
+}
+
+.progressFill {
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #5b8def, #49b0d1);
+  transition: width 0.18s linear;
+}
+
+.progressDone {
+  background: linear-gradient(90deg, #2f9a5a, #49d17a);
+}
+
+.readouts {
+  display: flex;
+  gap: 1.25rem;
+}
+
+.readout {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  line-height: 1.2;
+}
+
+.readoutLabel {
+  font-size: 0.66rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: rgba(255, 255, 255, 0.45);
+}
+
+.readoutValue {
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.readoutWarn .readoutValue {
+  color: #ff8a5b;
 }

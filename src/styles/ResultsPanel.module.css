@@ -1,0 +1,178 @@
+.backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: grid;
+  place-items: center;
+  padding: 1rem;
+  z-index: 50;
+  animation: fade 0.15s ease;
+}
+
+@keyframes fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.panel {
+  width: min(560px, 100%);
+  background: #1f1f1f;
+  border: 1px solid #383838;
+  border-radius: 14px;
+  padding: 1.5rem;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+}
+
+.medal {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.9rem 1rem;
+  border-radius: 10px;
+  margin-bottom: 1.25rem;
+  border: 1px solid #383838;
+}
+
+.medalIcon {
+  display: grid;
+  place-items: center;
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+  font-size: 1.5rem;
+  background: rgba(255, 255, 255, 0.1);
+  flex-shrink: 0;
+}
+
+.medalName {
+  margin: 0;
+  font-size: 1.4rem;
+}
+
+.outcome {
+  margin: 0.15rem 0 0;
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.medal_gold {
+  background: linear-gradient(120deg, #4a3c10, #2a2410);
+  border-color: #b8912f;
+}
+.medal_gold .medalIcon {
+  color: #ffd867;
+}
+
+.medal_silver {
+  background: linear-gradient(120deg, #35383c, #232426);
+  border-color: #9aa3ad;
+}
+.medal_silver .medalIcon {
+  color: #d7dde3;
+}
+
+.medal_bronze {
+  background: linear-gradient(120deg, #402f1e, #241c12);
+  border-color: #a4703c;
+}
+.medal_bronze .medalIcon {
+  color: #e0a06a;
+}
+
+.medal_none {
+  background: #2a2020;
+  border-color: #6a3a3a;
+}
+.medal_none .medalIcon {
+  color: #ff6b6b;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.88rem;
+  margin-bottom: 1.5rem;
+}
+
+.table th,
+.table td {
+  padding: 0.5rem 0.6rem;
+  text-align: right;
+  border-bottom: 1px solid #2c2c2c;
+  font-variant-numeric: tabular-nums;
+}
+
+.table thead th {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: rgba(255, 255, 255, 0.5);
+  border-bottom-color: #3a3a3a;
+}
+
+.table th[scope='row'] {
+  text-align: left;
+  color: rgba(255, 255, 255, 0.75);
+  font-weight: 600;
+}
+
+.you {
+  font-weight: 700;
+}
+
+.mark {
+  display: inline-block;
+  margin-right: 0.3rem;
+  font-weight: 700;
+}
+
+.met {
+  color: #49d17a;
+}
+
+.missed {
+  color: rgba(255, 255, 255, 0.35);
+}
+
+.bronzeCol {
+  border-left: 1px solid #2c2c2c;
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+}
+
+.primary,
+.secondary {
+  font: inherit;
+  font-weight: 600;
+  padding: 0.5rem 1.1rem;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.primary {
+  background: #2f7d32;
+  border: 1px solid #3a9a3e;
+  color: #fff;
+}
+
+.primary:hover {
+  background: #37933b;
+}
+
+.secondary {
+  background: transparent;
+  border: 1px solid #3a3a3a;
+  color: inherit;
+}
+
+.secondary:hover {
+  border-color: #5b8def;
+}
